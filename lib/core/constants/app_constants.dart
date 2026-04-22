@@ -17,4 +17,5 @@ class AppConstants {
   static const String dateTimeFormat = 'dd.MM.yyyy HH:mm';
   static const String dateFormatReport = 'dd MMMM yyyy';
   static const String dateFormatFileName = 'yyyyMMdd';
+  static const String dateTimeFormatFileName = 'yyyyMMdd_HHmmss';
 }

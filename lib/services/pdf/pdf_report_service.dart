@@ -79,8 +79,18 @@ class PdfReportService {
     pdf.addPage(PdfPageBloodSugar.build(sugarMeasurements, age, engine));
 
     final fileName =
-        '${AppTexts.pdfFileName}${DateFormat(AppConstants.dateFormatFileName).format(now)}.pdf';
+      '${AppTexts.pdfFileName}${DateFormat(AppConstants.dateTimeFormatFileName).format(now)}.pdf';
+    final bytes = await pdf.save();
 
-    await Printing.sharePdf(bytes: await pdf.save(), filename: fileName);
+    try {
+      // Önce sistemin PDF önizleme/yazdırma ekranını aç.
+      await Printing.layoutPdf(
+        name: fileName,
+        onLayout: (_) async => bytes,
+      );
+    } catch (_) {
+      // Bazı cihaz/emülatörlerde print servisi yoksa paylaşmaya düş.
+      await Printing.sharePdf(bytes: bytes, filename: fileName);
+    }
   }
 }

@@ -17,6 +17,51 @@ import 'pdf_widgets.dart';
 class PdfPageBloodSugar {
   PdfPageBloodSugar._();
 
+  static pw.Widget _stageLegendItem(String label, PdfColor color) {
+    return pw.Row(
+      mainAxisSize: pw.MainAxisSize.min,
+      children: [
+        pw.Container(
+          width: 8,
+          height: 8,
+          decoration: pw.BoxDecoration(
+            color: color,
+            shape: pw.BoxShape.circle,
+          ),
+        ),
+        pw.SizedBox(width: 4),
+        pw.Text(
+          label,
+          style: PdfFontLoader.textStyle(
+            color: PdfTheme.textPrimary,
+            fontSize: 8,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static pw.Widget _lineLegendItem(String label, PdfColor color) {
+    return pw.Row(
+      mainAxisSize: pw.MainAxisSize.min,
+      children: [
+        pw.Container(
+          width: 14,
+          height: 2,
+          color: color,
+        ),
+        pw.SizedBox(width: 4),
+        pw.Text(
+          label,
+          style: PdfFontLoader.textStyle(
+            color: PdfTheme.textPrimary,
+            fontSize: 8,
+          ),
+        ),
+      ],
+    );
+  }
+
   static pw.Page build(
     List<Measurement> sugarList,
     int age,
@@ -26,49 +71,13 @@ class PdfPageBloodSugar {
     final postMealList = sugarList.where((m) => m.isFasting != true).toList();
 
     return pw.Page(
-      pageFormat: PdfPageFormat.a4,
-      margin: const pw.EdgeInsets.all(28),
+      pageFormat: PdfPageFormat.a4.landscape,
+      margin: const pw.EdgeInsets.all(22),
       build: (ctx) => pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           PdfWidgets.header(AppTexts.pdfSugarReport, null),
           pw.SizedBox(height: 10),
-          if (fastingList.isNotEmpty) ...[
-            PdfWidgets.sectionTitle(AppTexts.pdfFastingTrend),
-            pw.SizedBox(height: 4),
-            PdfChartPainter.lineChart(
-              measurements: fastingList,
-              getValue: (m) => m.value1,
-              getColor: (m) {
-                final stage = engine.evaluateSugarStage(
-                  value: m.value1,
-                  isFasting: true,
-                );
-                return PdfTheme.stageColor(stage.label);
-              },
-              unit: 'mg/dL',
-              height: 62,
-            ),
-            pw.SizedBox(height: 6),
-          ],
-          if (postMealList.isNotEmpty) ...[
-            PdfWidgets.sectionTitle(AppTexts.pdfPostMealTrend),
-            pw.SizedBox(height: 4),
-            PdfChartPainter.lineChart(
-              measurements: postMealList,
-              getValue: (m) => m.value1,
-              getColor: (m) {
-                final stage = engine.evaluateSugarStage(
-                  value: m.value1,
-                  isFasting: false,
-                );
-                return PdfTheme.stageColor(stage.label);
-              },
-              unit: 'mg/dL',
-              height: 62,
-            ),
-            pw.SizedBox(height: 6),
-          ],
           if (fastingList.isEmpty && postMealList.isEmpty)
             pw.Container(
               width: double.infinity,
@@ -85,6 +94,78 @@ class PdfPageBloodSugar {
                 ),
               ),
             ),
+          if (fastingList.isNotEmpty || postMealList.isNotEmpty) ...[
+            pw.Row(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Expanded(
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      PdfWidgets.sectionTitle(AppTexts.pdfFastingTrend),
+                      pw.SizedBox(height: 4),
+                      PdfChartPainter.lineChart(
+                        measurements: fastingList,
+                        getValue: (m) => m.value1,
+                        getColor: (m) {
+                          final stage = engine.evaluateSugarStage(
+                            value: m.value1,
+                            isFasting: true,
+                          );
+                          return PdfTheme.stageColor(stage.label);
+                        },
+                        unit: 'mg/dL',
+                        height: 110,
+                      ),
+                    ],
+                  ),
+                ),
+                pw.SizedBox(width: 10),
+                pw.Expanded(
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      PdfWidgets.sectionTitle(AppTexts.pdfPostMealTrend),
+                      pw.SizedBox(height: 4),
+                      PdfChartPainter.lineChart(
+                        measurements: postMealList,
+                        getValue: (m) => m.value1,
+                        getColor: (m) {
+                          final stage = engine.evaluateSugarStage(
+                            value: m.value1,
+                            isFasting: false,
+                          );
+                          return PdfTheme.stageColor(stage.label);
+                        },
+                        unit: 'mg/dL',
+                        height: 110,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            pw.SizedBox(height: 8),
+            pw.Wrap(
+              spacing: 12,
+              runSpacing: 4,
+              children: [
+                _lineLegendItem(AppTexts.fasting, PdfTheme.primaryDark),
+                _lineLegendItem(AppTexts.postMeal, PdfTheme.accent),
+              ],
+            ),
+            pw.SizedBox(height: 6),
+            PdfWidgets.sectionTitle(AppTexts.pdfLegendTitle),
+            pw.SizedBox(height: 4),
+            pw.Wrap(
+              spacing: 10,
+              runSpacing: 4,
+              children: BloodSugarStage.values
+                  .map((s) => _stageLegendItem(s.label, PdfTheme.stageColor(s.label)))
+                  .toList(),
+            ),
+          ],
+          pw.SizedBox(height: 8),
           PdfWidgets.sectionTitle(AppTexts.pdfMeasurementDetails),
           pw.SizedBox(height: 4),
           PdfTableBuilder.bloodSugar(sugarList, age, engine),

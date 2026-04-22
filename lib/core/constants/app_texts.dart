@@ -177,6 +177,10 @@ class AppTexts {
   static const pdfFastingSugarAvg = 'Açlık Şekeri';
   static const pdfPostMealSugarAvg = 'Tokluk Şekeri';
   static const pdfBPReport = 'Tansiyon Raporu';
+    static const pdfBPTrendCombined = 'Tansiyon Trend Grafiği';
+    static const pdfLegendTitle = 'Renk Kodları';
+    static const pdfSystolicLine = 'Büyük';
+    static const pdfDiastolicLine = 'Küçük';
   static const pdfSystolicTrend = 'Büyük Tansiyon Trendi';
   static const pdfDiastolicTrend = 'Küçük Tansiyon Trendi';
   static const pdfMeasurementDetails = 'Ölçüm Detayları';
