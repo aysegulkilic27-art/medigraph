@@ -12,7 +12,7 @@ Future<void> saveProfileForm({
   required WidgetRef ref,
   required GlobalKey<FormState> formKey,
   required TextEditingController nameController,
-  required TextEditingController ageController,
+  required DateTime? selectedBirthDate,
   required TextEditingController heightController,
   required TextEditingController weightController,
   required String? gender,
@@ -24,10 +24,9 @@ Future<void> saveProfileForm({
   if (formState == null || !formState.validate()) return;
   formState.save();
 
-  final age = int.tryParse(ageController.text.trim());
   final height = double.tryParse(heightController.text.trim());
   final weight = double.tryParse(weightController.text.trim());
-  if (age == null || height == null || weight == null) {
+  if (height == null || weight == null || selectedBirthDate == null) {
     if (context.mounted) {
       ScaffoldMessenger.of(
         context,
@@ -46,7 +45,7 @@ Future<void> saveProfileForm({
       name: nameController.text.trim().isEmpty
           ? null
           : nameController.text.trim(),
-      age: age,
+      birthDate: selectedBirthDate,
       height: height,
       weight: weight,
       gender: g,

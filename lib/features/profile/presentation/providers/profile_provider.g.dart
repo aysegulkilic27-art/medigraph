@@ -70,7 +70,7 @@ final saveProfileUseCaseProvider =
 );
 
 typedef SaveProfileUseCaseRef = AutoDisposeProviderRef<SaveProfileUseCase>;
-String _$profileHash() => r'a9feb5fd8281da16b693b61bd5c496e084ed4f0d';
+String _$profileHash() => r'e39e3334b19f2586a2844fdaac1a77d2bd753cf4';
 
 /// See also [profile].
 @ProviderFor(profile)

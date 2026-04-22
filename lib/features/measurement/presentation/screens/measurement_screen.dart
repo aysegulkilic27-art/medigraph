@@ -90,19 +90,16 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
   }
 
   Future<void> _savePressure() async {
-    final rawSys = double.tryParse(_sysController.text.trim());
-    final rawDia = double.tryParse(_diaController.text.trim());
-    if (rawSys == null) {
+    final sys = double.tryParse(_sysController.text.trim());
+    final dia = double.tryParse(_diaController.text.trim());
+    if (sys == null || sys < 60 || sys > 300) {
       _showMeasurementSnackBar(AppTexts.invalidSystolic, AppColors.statusHigh);
       return;
     }
-    if (rawDia == null) {
+    if (dia == null || dia < 40 || dia > 300) {
       _showMeasurementSnackBar(AppTexts.invalidDiastolic, AppColors.statusHigh);
       return;
     }
-
-    final sys = rawSys * 10;
-    final dia = rawDia * 10;
 
     setState(() => _savingPressure = true);
     try {

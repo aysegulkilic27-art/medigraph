@@ -209,7 +209,7 @@ class _WhiteInput extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
-      maxLength: 2,
+      maxLength: 3,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       style: GoogleFonts.spaceMono(
         color: AppColors.textPrimary,

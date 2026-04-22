@@ -6,8 +6,10 @@ class AppTexts {
 
   // Validation
   static const invalidSugar = 'Lütfen geçerli şeker değeri girin.';
-  static const invalidSystolic = 'Lütfen geçerli büyük tansiyon değeri girin.';
-  static const invalidDiastolic = 'Lütfen geçerli küçük tansiyon değeri girin.';
+  static const invalidSystolic =
+      'Büyük tansiyon 60-300 mmHg aralığında olmalıdır.';
+  static const invalidDiastolic =
+      'Küçük tansiyon 40-300 mmHg aralığında olmalıdır.';
   static const invalidPressure = 'Lütfen geçerli tansiyon değeri girin.';
   static const invalidBPSystolic =
       'Lütfen geçerli büyük tansiyon değeri girin.';
@@ -15,7 +17,7 @@ class AppTexts {
       'Lütfen geçerli küçük tansiyon değeri girin.';
   static const invalidBPGeneral = 'Lütfen geçerli tansiyon değeri girin.';
   static const invalidProfile = 'Geçersiz profil bilgisi';
-  static const invalidAge = 'Lütfen geçerli yaş girin.';
+  static const invalidAge = 'Lütfen geçerli doğum tarihi seçin.';
   static const invalidHeight = 'Lütfen geçerli boy girin.';
   static const invalidWeight = 'Lütfen geçerli kilo girin.';
   static const requiredField = 'Bu alan zorunludur.';
@@ -39,8 +41,8 @@ class AppTexts {
   static const saveButton = 'Kaydet';
   static const saving = 'Kaydediliyor...';
   static const noteHint = 'Not ekle (opsiyonel)';
-  static const systolicHint = 'Büyük Tansiyon (orn: 15)';
-  static const diastolicHint = 'Küçük Tansiyon (orn: 7)';
+    static const systolicHint = 'Büyük Tansiyon (orn: 150 mmHg)';
+    static const diastolicHint = 'Küçük Tansiyon (orn: 70 mmHg)';
   static const recentMeasurements = 'Son Ölçümler';
   static const noMeasurements = 'Henüz ölçüm yok.';
   static const firstMeasurementHint =
@@ -101,7 +103,7 @@ class AppTexts {
   static const profileTitle = 'Profil';
   static const updateProfileTitle = 'Profili Güncelle';
   static const nameLabel = 'Ad (Opsiyonel)';
-  static const ageLabel = 'Yaş';
+  static const birthDateLabel = 'Doğum Tarihi';
   static const heightLabel = 'Boy (cm)';
   static const weightLabel = 'Kilo (kg)';
   static const genderLabel = 'Cinsiyet';

@@ -13,4 +13,18 @@ class AppDateUtils {
       _dateTimeFormat.format(dateTime);
 
   static String formatDate(DateTime dateTime) => _dateFormat.format(dateTime);
+
+  /// Doğum tarihinden yaşı hesaplar
+  static int calculateAge(DateTime birthDate) {
+    final today = DateTime.now();
+    int age = today.year - birthDate.year;
+    
+    // Doğum günü bu yıl henüz gelmemişse yaştan 1 çıkar
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+    
+    return age;
+  }
 }

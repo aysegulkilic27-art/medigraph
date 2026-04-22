@@ -62,7 +62,7 @@ class ProfileListScreen extends ConsumerWidget {
           Icon(
             Icons.people_outline,
             size: 80,
-            color: AppColors.primary.withOpacity(0.5),
+            color: AppColors.primary.withValues(alpha: 0.5),
           ),
           SizedBox(height: AppDimensions.spacingMD(context)),
           Text(

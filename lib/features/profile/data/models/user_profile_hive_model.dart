@@ -7,7 +7,7 @@ part 'user_profile_hive_model.g.dart';
 @HiveType(typeId: 0)
 class UserProfileHiveModel extends HiveObject {
   @HiveField(0)
-  late int age;
+  late DateTime birthDate;
 
   @HiveField(1)
   late double height;

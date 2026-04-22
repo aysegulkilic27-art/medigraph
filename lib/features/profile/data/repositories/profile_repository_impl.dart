@@ -9,7 +9,7 @@ extension UserProfileHiveMapper on UserProfileHiveModel {
   UserProfile toEntity() => UserProfile(
     id: id ?? key?.toString(), // Eğer id null ise Hive key'ini kullan
     name: name,
-    age: age,
+    birthDate: birthDate,
     height: height,
     weight: weight,
     gender: gender,
@@ -20,7 +20,7 @@ extension UserProfileMapper on UserProfile {
   UserProfileHiveModel toHiveModel() => UserProfileHiveModel()
     ..id = id
     ..name = name
-    ..age = age
+    ..birthDate = birthDate
     ..height = height
     ..weight = weight
     ..gender = gender;

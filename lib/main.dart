@@ -18,13 +18,30 @@ import 'package:intl/date_symbol_data_local.dart';
 Future<void> _initHive() async {
   try {
     await Hive.initFlutter();
-    if (!Hive.isAdapterRegistered(0))
+    if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(UserProfileHiveModelAdapter());
-    if (!Hive.isAdapterRegistered(1))
+    }
+    if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(MeasurementHiveModelAdapter());
+    }
 
-    await Hive.openBox<UserProfileHiveModel>(AppConstants.profileBoxName);
-    await Hive.openBox<MeasurementHiveModel>(AppConstants.measurementsBoxName);
+    // Eski veri formatı ile uyumsuzluk durumunda box'ı sil ve yeniden oluştur
+    try {
+      await Hive.openBox<UserProfileHiveModel>(AppConstants.profileBoxName);
+    } catch (e) {
+      debugPrint('Profile box open error, deleting and recreating: $e');
+      await Hive.deleteBoxFromDisk(AppConstants.profileBoxName);
+      await Hive.openBox<UserProfileHiveModel>(AppConstants.profileBoxName);
+    }
+
+    try {
+      await Hive.openBox<MeasurementHiveModel>(AppConstants.measurementsBoxName);
+    } catch (e) {
+      debugPrint('Measurements box open error, deleting and recreating: $e');
+      await Hive.deleteBoxFromDisk(AppConstants.measurementsBoxName);
+      await Hive.openBox<MeasurementHiveModel>(AppConstants.measurementsBoxName);
+    }
+
     await Hive.openBox(AppConstants.settingsBoxName); // Ayarlar için ayrı kutu
   } catch (e) {
     debugPrint('Hive init error: $e');

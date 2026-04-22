@@ -39,11 +39,15 @@ class PdfChartPainter {
       );
     }
 
-    final values = measurements.map(getValue).toList();
+    final sorted = [...measurements]
+      ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+
+    final values = sorted.map(getValue).toList();
     final minRaw = values.reduce((a, b) => a < b ? a : b);
     final maxRaw = values.reduce((a, b) => a > b ? a : b);
-    final minVal = minRaw - 10;
-    final maxVal = maxRaw + 10;
+    final padding = ((maxRaw - minRaw).abs() * 0.15).clamp(5.0, 20.0);
+    final minVal = minRaw - padding;
+    final maxVal = maxRaw + padding;
     final range = (maxVal - minVal).abs() < 0.0001 ? 1.0 : maxVal - minVal;
 
     return pw.Container(
@@ -52,14 +56,15 @@ class PdfChartPainter {
         color: PdfTheme.bgLight,
         borderRadius: pw.BorderRadius.circular(8),
       ),
-      padding: const pw.EdgeInsets.fromLTRB(20, 8, 8, 14),
+      padding: const pw.EdgeInsets.fromLTRB(24, 8, 8, 16),
       child: pw.CustomPaint(
         size: PdfPoint.zero,
         painter: (canvas, size) {
           final w = size.x;
           final h = size.y;
-          final n = measurements.length;
+          final n = sorted.length;
 
+          // Arka plan yatay kılavuz çizgileri
           canvas.setStrokeColor(PdfColors.grey300);
           canvas.setLineWidth(0.4);
           for (int i = 0; i <= 4; i++) {
@@ -76,36 +81,47 @@ class PdfChartPainter {
             }
           }
 
+          // Ana çizgi (line chart)
+          canvas.setStrokeColor(PdfTheme.primary);
+          canvas.setLineWidth(1.2);
           for (int i = 0; i < n; i++) {
-            final m = measurements[i];
+            final m = sorted[i];
             final val = getValue(m);
             final x = n == 1 ? w / 2 : w * i / (n - 1);
             final y = h - (h * (val - minVal) / range);
 
             if (i > 0) {
-              final prevVal = getValue(measurements[i - 1]);
+              final prevVal = getValue(sorted[i - 1]);
               final prevX = n == 1 ? w / 2 : w * (i - 1) / (n - 1);
               final prevY = h - (h * (prevVal - minVal) / range);
-              canvas.setStrokeColor(PdfTheme.primary);
-              canvas.setLineWidth(1.0);
               canvas.moveTo(prevX, prevY);
               canvas.lineTo(x, y);
               canvas.strokePath();
             }
 
+            // Nokta işaretleri
             canvas.setFillColor(getColor(m));
             canvas.drawEllipse(x, y, 2.2, 2.2);
             canvas.fillPath();
+          }
 
-            if (i % 3 == 0 || n <= 5 || i == n - 1) {
-              final dateStr = DateFormat(
-                AppConstants.dateFormatShort,
-              ).format(m.dateTime);
-              canvas.setFillColor(PdfTheme.textSecond);
-              final font = canvas.defaultFont;
-              if (font != null) {
-                canvas.drawString(font, 5, dateStr, x - 8, -8);
-              }
+          // X ekseninde sabit sayıda tarih etiketi göster (çakışmayı azaltır)
+          final labelIndices = <int>{
+            0,
+            if (n > 2) (n / 2).floor(),
+            if (n > 3) (n * 0.75).floor(),
+            if (n > 1) n - 1,
+          }.toList()
+            ..sort();
+
+          for (final i in labelIndices) {
+            final m = sorted[i];
+            final x = n == 1 ? w / 2 : w * i / (n - 1);
+            final dateStr = DateFormat(AppConstants.dateFormatShort).format(m.dateTime);
+            canvas.setFillColor(PdfTheme.textSecond);
+            final font = canvas.defaultFont;
+            if (font != null) {
+              canvas.drawString(font, 5, dateStr, x - 9, -9);
             }
           }
 

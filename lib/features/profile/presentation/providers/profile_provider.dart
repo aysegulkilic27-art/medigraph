@@ -35,17 +35,9 @@ SaveProfileUseCase saveProfileUseCase(SaveProfileUseCaseRef ref) {
 
 @riverpod
 Future<UserProfile?> profile(ProfileRef ref) async {
-  final activeProfile = ref.watch(activeProfileProvider);
-  if (activeProfile == null) return null;
-  
-  return UserProfile(
-    id: activeProfile.id,
-    name: activeProfile.name,
-    age: activeProfile.age,
-    height: activeProfile.height,
-    weight: activeProfile.weight,
-    gender: activeProfile.gender,
-  );
+  final activeProfileHive = ref.watch(activeProfileProvider);
+  if (activeProfileHive == null) return null;
+  return activeProfileHive.toEntity();
 }
 
 @riverpod

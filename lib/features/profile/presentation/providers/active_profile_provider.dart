@@ -42,12 +42,10 @@ class ActiveProfileNotifier extends StateNotifier<UserProfileHiveModel?> {
         orElse: () => null,
       );
 
-      if (hiveModel == null) {
-        hiveModel = box.values.cast<UserProfileHiveModel?>().firstWhere(
-          (element) => element?.name == profile.name && element?.age == profile.age,
+      hiveModel ??= box.values.cast<UserProfileHiveModel?>().firstWhere(
+          (element) => element?.name == profile.name && element?.birthDate == profile.birthDate,
           orElse: () => null,
         );
-      }
 
       if (hiveModel != null) {
         state = hiveModel;

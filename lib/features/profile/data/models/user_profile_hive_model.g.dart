@@ -17,7 +17,7 @@ class UserProfileHiveModelAdapter extends TypeAdapter<UserProfileHiveModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserProfileHiveModel()
-      ..age = fields[0] as int
+      ..birthDate = fields[0] as DateTime
       ..height = fields[1] as double
       ..weight = fields[2] as double
       ..gender = fields[3] as String
@@ -30,7 +30,7 @@ class UserProfileHiveModelAdapter extends TypeAdapter<UserProfileHiveModel> {
     writer
       ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.age)
+      ..write(obj.birthDate)
       ..writeByte(1)
       ..write(obj.height)
       ..writeByte(2)

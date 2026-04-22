@@ -1,4 +1,4 @@
-// Kullanıcının yaş, boy, kilo ve cinsiyet bilgilerini
+// Kullanıcının doğum tarihi, boy, kilo ve cinsiyet bilgilerini
 // girdiği profil düzenleme ekranı.
 
 import 'package:diyabetansiyon/core/constants/app_texts.dart';
@@ -24,9 +24,9 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
+  DateTime? _selectedBirthDate;
   String? _gender;
   bool _saving = false;
 
@@ -36,17 +36,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final p = widget.initialProfile;
     if (p != null) {
       _nameController.text = p.name ?? '';
-      _ageController.text = p.age.toString();
+      _selectedBirthDate = p.birthDate;
       _heightController.text = p.height.toString();
       _weightController.text = p.weight.toString();
       _gender = p.gender;
+    } else {
+      _selectedBirthDate = DateTime(DateTime.now().year - 30);
     }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _ageController.dispose();
     _heightController.dispose();
     _weightController.dispose();
     super.dispose();
@@ -72,14 +73,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               key: _formKey,
               child: ProfileForm(
                 nameController: _nameController,
-                ageController: _ageController,
+                selectedBirthDate: _selectedBirthDate,
+                onBirthDateChanged: (date) => setState(() => _selectedBirthDate = date),
                 heightController: _heightController,
                 weightController: _weightController,
                 gender: _gender,
                 onGenderChanged: (v) => setState(() => _gender = v),
-                ageValidator: (v) => (int.tryParse(v ?? '') == null)
-                    ? AppTexts.invalidAge
-                    : null,
+                birthDateValidator: (date) => date == null ? AppTexts.invalidAge : null,
                 heightValidator: (v) => (double.tryParse(v ?? '') == null)
                     ? AppTexts.invalidHeight
                     : null,
@@ -93,7 +93,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ref: ref,
                   formKey: _formKey,
                   nameController: _nameController,
-                  ageController: _ageController,
+                  selectedBirthDate: _selectedBirthDate,
                   heightController: _heightController,
                   weightController: _weightController,
                   gender: _gender,
