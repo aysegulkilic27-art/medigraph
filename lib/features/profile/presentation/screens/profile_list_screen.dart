@@ -40,7 +40,57 @@ class ProfileListScreen extends ConsumerWidget {
                           SizedBox(height: AppDimensions.spacingSM(context)),
                       itemBuilder: (context, index) {
                         final profile = profiles[index];
-                        return _ProfileCard(profile: profile);
+                        return Dismissible(
+                          key: ValueKey(profile.id ?? 'profile_$index'),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade600,
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.cardRadius(context),
+                              ),
+                            ),
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppDimensions.spacingMD(context),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.delete_outline, color: Colors.white),
+                                SizedBox(width: AppDimensions.spacingXS(context)),
+                                Text(
+                                  'Profili Sil',
+                                  style: GoogleFonts.nunito(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onDismissed: (_) async {
+                            final id = profile.id;
+                            if (id == null) return;
+
+                            await ref.read(profileRepositoryProvider).deleteProfile(id);
+
+                            final active = ref.read(activeProfileProvider);
+                            if (active?.id == id) {
+                              await ref.read(activeProfileProvider.notifier).clearActiveProfile();
+                            }
+
+                            ref.invalidate(allProfilesProvider);
+                            ref.invalidate(profileProvider);
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Profil silindi')),
+                              );
+                            }
+                          },
+                          child: _ProfileCard(profile: profile),
+                        );
                       },
                     ),
                   ),

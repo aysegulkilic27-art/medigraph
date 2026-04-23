@@ -59,9 +59,51 @@ class RecordsTabView extends ConsumerWidget {
           itemCount: filtered.length,
           itemBuilder: (_, i) {
             final measurement = filtered[i];
-            return type == MeasurementType.bloodPressure
+            final card = type == MeasurementType.bloodPressure
                 ? BpRecordCard(measurement: measurement, age: age)
                 : SugarRecordCard(measurement: measurement, age: age);
+
+            return Dismissible(
+              key: ValueKey(measurement.id),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                decoration: BoxDecoration(
+                  color: Colors.red.shade600,
+                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius(context)),
+                ),
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppDimensions.spacingMD(context),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.delete_outline, color: Colors.white),
+                    SizedBox(width: AppDimensions.spacingXS(context)),
+                    Text(
+                      'Ölçümü Sil',
+                      style: GoogleFonts.nunito(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              onDismissed: (_) async {
+                await ref
+                    .read(measurementRepositoryProvider)
+                    .deleteMeasurement(measurement.id);
+                ref.invalidate(allMeasurementsProvider);
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Ölçüm silindi')),
+                  );
+                }
+              },
+              child: card,
+            );
           },
         );
       },

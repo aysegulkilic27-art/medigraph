@@ -5,6 +5,7 @@ import 'package:diyabetansiyon/features/measurement/domain/entities/measurement.
 
 abstract class MeasurementRepository {
   Future<void> addMeasurement(Measurement measurement);
+  Future<void> deleteMeasurement(String id);
   Future<void> deleteAll();
   Future<List<Measurement>> getAll(String? profileId);
   Future<List<Measurement>> getByDateRange(DateTime from, DateTime to, String? profileId);

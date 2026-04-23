@@ -13,6 +13,11 @@ class _FakeMeasurementRepo implements MeasurementRepository {
   }
 
   @override
+  Future<void> deleteMeasurement(String id) async {
+    saved.removeWhere((m) => m.id == id);
+  }
+
+  @override
   Future<void> deleteAll() async {
     saved.clear();
   }

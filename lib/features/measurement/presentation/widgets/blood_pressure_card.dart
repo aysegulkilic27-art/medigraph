@@ -216,14 +216,26 @@ class _WhiteInput extends StatelessWidget {
         fontWeight: FontWeight.w700,
       ),
       decoration: InputDecoration(
+        labelText: label,
         hintText: hint,
         counterText: '',
+        isDense: true,
         labelStyle: GoogleFonts.nunito(
           color: AppColors.textSecondary,
           fontWeight: FontWeight.w700,
+          fontSize: AppDimensions.fontSM(context),
+        ),
+        hintStyle: GoogleFonts.nunito(
+          color: AppColors.textHint,
+          fontSize: AppDimensions.fontXS(context) +
+              AppDimensions.spacingXS(context) / 4,
         ),
         filled: true,
         fillColor: AppColors.surface,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppDimensions.spacingMD(context),
+          vertical: AppDimensions.spacingSM(context),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
             AppDimensions.inputRadius(context),

@@ -44,6 +44,11 @@ class MeasurementRepositoryImpl implements MeasurementRepository {
   }
 
   @override
+  Future<void> deleteMeasurement(String id) async {
+    await box.delete(id);
+  }
+
+  @override
   Future<void> deleteAll() async {
     try {
       await box.clear();

@@ -6,32 +6,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/foundation.dart';
 
 class ActiveProfileNotifier extends StateNotifier<UserProfileHiveModel?> {
-  ActiveProfileNotifier() : super(null) {
-    _loadFromDisk();
-  }
+  ActiveProfileNotifier() : super(null);
 
   static const String _activeProfileKey = 'last_active_profile_id';
-
-  // Uygulama açıldığında son seçilen profili diskten oku
-  void _loadFromDisk() {
-    try {
-      final box = Hive.box<UserProfileHiveModel>(AppConstants.profileBoxName);
-      final settingsBox = Hive.box(AppConstants.settingsBoxName); 
-      
-      final lastId = settingsBox.get(_activeProfileKey);
-      if (lastId != null) {
-        final hiveModel = box.values.cast<UserProfileHiveModel?>().firstWhere(
-          (element) => element?.id == lastId,
-          orElse: () => null,
-        );
-        if (hiveModel != null) {
-          state = hiveModel;
-        }
-      }
-    } catch (e) {
-      debugPrint('Load active profile error: $e');
-    }
-  }
 
   Future<void> setActiveProfile(UserProfile profile) async {
     final box = Hive.box<UserProfileHiveModel>(AppConstants.profileBoxName);
