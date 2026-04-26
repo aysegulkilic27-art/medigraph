@@ -43,7 +43,7 @@ class AgeWarningBanner extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              AppTexts.ageWarningText,
+              AppTexts.bodyWarningBanner,
               style: GoogleFonts.nunito(
                 color: AppColors.bannerText,
                 fontSize:

@@ -1,6 +1,8 @@
 // Kullanıcının doğum tarihi, boy, kilo ve cinsiyet bilgilerini tutan entity.
 // Eşik değer hesaplamalarında kullanılır.
 
+import 'package:diyabetansiyon/core/utils/date_utils.dart';
+
 class UserProfile {
   final String? id;
   final String? name;
@@ -19,16 +21,5 @@ class UserProfile {
   });
 
   /// Doğum tarihinden yaşı hesaplar
-  int get age {
-    final today = DateTime.now();
-    int calculatedAge = today.year - birthDate.year;
-    
-    // Doğum günü bu yıl henüz gelmemişse yaştan 1 çıkar
-    if (today.month < birthDate.month ||
-        (today.month == birthDate.month && today.day < birthDate.day)) {
-      calculatedAge--;
-    }
-    
-    return calculatedAge;
-  }
+  int get age => AppDateUtils.calculateAge(birthDate);
 }

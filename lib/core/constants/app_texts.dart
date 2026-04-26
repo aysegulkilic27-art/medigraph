@@ -15,7 +15,7 @@ class AppTexts {
       'Lütfen geçerli büyük tansiyon değeri girin.';
   static const invalidBPDiastolic =
       'Lütfen geçerli küçük tansiyon değeri girin.';
-  static const invalidBPGeneral = 'Lütfen geçerli tansiyon değeri girin.';
+  static const invalidBPGeneral = invalidPressure;
   static const invalidProfile = 'Geçersiz profil bilgisi';
   static const invalidAge = 'Lütfen geçerli doğum tarihi seçin.';
   static const invalidHeight = 'Lütfen geçerli boy girin.';
@@ -47,7 +47,7 @@ class AppTexts {
   static const noMeasurements = 'Henüz ölçüm yok.';
   static const firstMeasurementHint =
       'İlk ölçümü ekleyerek takibe başlayabilirsiniz.';
-  static const startTracking = 'İlk ölçümü ekleyerek takibe başlayabilirsiniz.';
+    static const startTracking = firstMeasurementHint;
 
   // Analysis
   static const analysisTitle = 'Analiz';
@@ -74,9 +74,7 @@ class AppTexts {
   // Common
   static const measurementsSection = 'Ölçümler';
   static const settingsTitle = 'Ayarlar';
-  static const settingsAgeBanner =
-      'Boy ve kilo bilgisi değişiklikleri ilerleyen ölçümlerinizdeki eşik değer hesabında kullanılır. Lütfen bilgilerinizi güncel tutun.';
-  static const ageWarningText =
+    static const bodyWarningBanner =
       'Boy ve kilo bilgisi değişimleri ilerleyen ölçümlerinizdeki eşik değer hesabında kullanılır. Lütfen bilgilerinizi güncel tutun.';
   static const updateProfile = 'Profili Güncelle';
   static const updateProfileSub = 'Mevcut profili düzenle';
