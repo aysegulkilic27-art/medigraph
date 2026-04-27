@@ -3,8 +3,10 @@
 import 'package:diyabetansiyon/core/constants/app_texts.dart';
 import 'package:diyabetansiyon/core/constants/app_dimensions.dart';
 import 'package:diyabetansiyon/core/constants/app_theme.dart';
+import 'package:diyabetansiyon/core/enums/blood_pressure_stage.dart';
+import 'package:diyabetansiyon/core/enums/blood_sugar_stage.dart';
 import 'package:diyabetansiyon/core/enums/measurement_type.dart';
-import 'package:diyabetansiyon/core/utils/stage_color_resolver.dart';
+import 'package:diyabetansiyon/core/threshold_engine/threshold_engine.dart';
 import 'package:diyabetansiyon/core/widgets/gradient_app_bar.dart';
 import 'package:diyabetansiyon/core/widgets/health_background.dart';
 import 'package:diyabetansiyon/features/measurement/presentation/providers/measurement_provider.dart';
@@ -121,9 +123,16 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
       _debugPrintLatestNotes(latest);
       final profile = await ref.read(profileProvider.future);
       final age = profile?.age ?? 30;
-        final gender = profile?.gender ?? 'male';
-        final isHigh = latest.isNotEmpty &&
-          StageColorResolver.isExceeded(latest.first, age, gender: gender);
+      final gender = profile?.gender ?? 'male';
+      final stage = ThresholdEngine.instance.evaluateBPStage(
+        systolic: sys.toInt(),
+        diastolic: dia.toInt(),
+        age: age,
+        gender: gender,
+      );
+      final isHigh =
+          stage != BloodPressureStage.normal &&
+          stage != BloodPressureStage.hypotension;
       if (!mounted) return;
       _sysController.clear();
       _diaController.clear();
@@ -164,11 +173,13 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
       ref.invalidate(allMeasurementsProvider);
       final latest = await ref.read(allMeasurementsProvider.future);
       _debugPrintLatestNotes(latest);
-      final profile = await ref.read(profileProvider.future);
-      final age = profile?.age ?? 30;
-        final gender = profile?.gender ?? 'male';
-        final isHigh = latest.isNotEmpty &&
-          StageColorResolver.isExceeded(latest.first, age, gender: gender);
+      final stage = ThresholdEngine.instance.evaluateSugarStage(
+        value: sugar,
+        isFasting: _isFasting,
+      );
+      final isHigh =
+          stage != BloodSugarStage.normal &&
+          stage != BloodSugarStage.hypoglycemia;
       if (!mounted) return;
       setState(() {
         _sugarController.clear();
