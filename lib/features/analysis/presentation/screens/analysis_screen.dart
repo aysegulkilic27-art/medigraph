@@ -57,7 +57,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
         tabIndex: _tabController.index,
       ),
     );
-    final age = ref.watch(profileProvider).value?.age ?? 30;
+    final profile = ref.watch(profileProvider).value;
+    final age = profile?.age ?? 30;
+    final gender = profile?.gender ?? 'male';
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -110,6 +112,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
               measurementsAsync: measurementsAsync,
               barGroupsAsync: barGroupsAsync,
               age: age,
+              gender: gender,
             ),
           ),
         ),

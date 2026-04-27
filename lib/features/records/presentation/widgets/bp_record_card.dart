@@ -10,14 +10,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BpRecordCard extends StatelessWidget {
-  const BpRecordCard({required this.measurement, required this.age, super.key});
+  const BpRecordCard({
+    required this.measurement,
+    required this.age,
+    required this.gender,
+    super.key,
+  });
 
   final Measurement measurement;
   final int age;
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = CardColorResolver.resolve(measurement, age);
+    final cardColor = CardColorResolver.resolve(
+      measurement,
+      age,
+      gender: gender,
+    );
     final sys = measurement.value1.toInt();
     final dia = measurement.value2?.toInt() ?? 0;
     final note = _readNote(measurement);
@@ -59,7 +69,11 @@ class BpRecordCard extends StatelessWidget {
                 ),
                 SizedBox(height: AppDimensions.spacingXS(context) / 2),
                 _StageBadge(
-                  label: StageColorResolver.labelOf(measurement, age),
+                  label: StageColorResolver.labelOf(
+                    measurement,
+                    age,
+                    gender: gender,
+                  ),
                   color: cardColor,
                 ),
                 SizedBox(height: AppDimensions.spacingXS(context) / 2),

@@ -25,6 +25,7 @@ class AnalysisScreenContent extends StatelessWidget {
     required this.measurementsAsync,
     required this.barGroupsAsync,
     required this.age,
+    required this.gender,
   });
 
   final AnalysisCategory selectedCategory;
@@ -33,6 +34,7 @@ class AnalysisScreenContent extends StatelessWidget {
   final AsyncValue<List<Measurement>> measurementsAsync;
   final AsyncValue<List<BarChartGroupData>> barGroupsAsync;
   final int age;
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +69,14 @@ class AnalysisScreenContent extends StatelessWidget {
                     measurements: measurements,
                     category: selectedCategory,
                     age: age,
+                    gender: gender,
                   ),
                   SizedBox(height: AppDimensions.spacingMD(context)),
                   LineChartCard(
                     measurements: measurements,
                     category: selectedCategory,
                     age: age,
+                    gender: gender,
                   ),
                 ],
               ),

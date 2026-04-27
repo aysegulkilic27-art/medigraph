@@ -15,12 +15,14 @@ class LineChartCard extends StatelessWidget {
     required this.measurements,
     required this.category,
     required this.age,
+    required this.gender,
     super.key,
   });
 
   final List<Measurement> measurements;
   final AnalysisCategory category;
   final int age;
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +148,7 @@ class LineChartCard extends StatelessWidget {
                         final dotColor = StageColorResolver.fromMeasurement(
                           m,
                           age,
+                          gender: gender,
                         );
                         return FlDotCirclePainter(
                           radius: 4,

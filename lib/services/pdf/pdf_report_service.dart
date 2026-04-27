@@ -59,6 +59,7 @@ class PdfReportService {
         .toList();
 
     final age = profile?.age ?? 30;
+  final gender = profile?.gender ?? 'male';
     final engine = ThresholdEngine.instance;
 
     final pdf = pw.Document(theme: PdfFontLoader.theme);
@@ -69,13 +70,14 @@ class PdfReportService {
         bpList: bpMeasurements,
         sugarList: sugarMeasurements,
         age: age,
+        gender: gender,
         engine: engine,
         now: now,
         dateRange: dateRange,
       ),
     );
 
-    pdf.addPage(PdfPageBloodPressure.build(bpMeasurements, age, engine));
+    pdf.addPage(PdfPageBloodPressure.build(bpMeasurements, age, gender, engine));
     pdf.addPage(PdfPageBloodSugar.build(sugarMeasurements, age, engine));
 
     final fileName =

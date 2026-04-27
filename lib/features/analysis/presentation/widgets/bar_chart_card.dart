@@ -17,11 +17,13 @@ class BarChartCard extends StatelessWidget {
     required this.measurements,
     required this.category,
     required this.age,
+    required this.gender,
   });
 
   final List<Measurement> measurements;
   final AnalysisCategory category;
   final int age;
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,11 @@ class BarChartCard extends StatelessWidget {
       final value = category == AnalysisCategory.diastolic
           ? (m.value2 ?? 0)
           : m.value1;
-      final barColor = StageColorResolver.fromMeasurement(m, age);
+      final barColor = StageColorResolver.fromMeasurement(
+        m,
+        age,
+        gender: gender,
+      );
 
       return BarChartGroupData(
         x: i,

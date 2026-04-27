@@ -25,6 +25,7 @@ class PdfPageSummary {
     required List<Measurement> bpList,
     required List<Measurement> sugarList,
     required int age,
+    required String gender,
     required ThresholdEngine engine,
     required DateTime now,
     required DateTimeRange dateRange,
@@ -34,6 +35,7 @@ class PdfPageSummary {
         systolic: m.value1.toInt(),
         diastolic: (m.value2 ?? 0).toInt(),
         age: age,
+        gender: gender,
       );
       return stage.index >= BloodPressureStage.elevated.index;
     }).length;

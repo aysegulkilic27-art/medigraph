@@ -7,18 +7,31 @@ import 'package:diyabetansiyon/core/enums/measurement_type.dart';
 import 'package:diyabetansiyon/core/utils/date_utils.dart';
 import 'package:diyabetansiyon/core/utils/stage_color_resolver.dart';
 import 'package:diyabetansiyon/features/measurement/domain/entities/measurement.dart';
+import 'package:diyabetansiyon/features/profile/presentation/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MeasurementListItem extends StatelessWidget {
+class MeasurementListItem extends ConsumerWidget {
   const MeasurementListItem({super.key, required this.measurement});
 
   final Measurement measurement;
 
   @override
-  Widget build(BuildContext context) {
-    final statusColor = StageColorResolver.fromMeasurement(measurement, 30);
-    final isHigh = StageColorResolver.isExceeded(measurement, 30);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider).value;
+    final age = profile?.age ?? 30;
+    final gender = profile?.gender ?? 'male';
+    final statusColor = StageColorResolver.fromMeasurement(
+      measurement,
+      age,
+      gender: gender,
+    );
+    final isHigh = StageColorResolver.isExceeded(
+      measurement,
+      age,
+      gender: gender,
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: AppDimensions.spacingSM(context)),

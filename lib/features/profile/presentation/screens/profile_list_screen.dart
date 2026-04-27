@@ -179,7 +179,9 @@ class _ProfileCard extends ConsumerWidget {
         leading: CircleAvatar(
           backgroundColor: AppColors.inputFill,
           child: Icon(
-            profile.gender == 'Erkek' ? Icons.male : Icons.female,
+            (profile.gender == 'male' || profile.gender == 'Erkek')
+                ? Icons.male
+                : Icons.female,
             color: AppColors.primary,
           ),
         ),

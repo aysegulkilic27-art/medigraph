@@ -121,7 +121,9 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
       _debugPrintLatestNotes(latest);
       final profile = await ref.read(profileProvider.future);
       final age = profile?.age ?? 30;
-      final isHigh = latest.isNotEmpty && StageColorResolver.isExceeded(latest.first, age);
+        final gender = profile?.gender ?? 'male';
+        final isHigh = latest.isNotEmpty &&
+          StageColorResolver.isExceeded(latest.first, age, gender: gender);
       if (!mounted) return;
       _sysController.clear();
       _diaController.clear();
@@ -164,7 +166,9 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
       _debugPrintLatestNotes(latest);
       final profile = await ref.read(profileProvider.future);
       final age = profile?.age ?? 30;
-      final isHigh = latest.isNotEmpty && StageColorResolver.isExceeded(latest.first, age);
+        final gender = profile?.gender ?? 'male';
+        final isHigh = latest.isNotEmpty &&
+          StageColorResolver.isExceeded(latest.first, age, gender: gender);
       if (!mounted) return;
       setState(() {
         _sugarController.clear();

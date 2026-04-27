@@ -20,6 +20,7 @@ class RecordsTabView extends ConsumerWidget {
     final allMeasurements = ref.watch(allMeasurementsProvider);
     final profile = ref.watch(profileProvider).value;
     final age = profile?.age ?? 30;
+    final gender = profile?.gender ?? 'male';
 
     return allMeasurements.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -60,7 +61,7 @@ class RecordsTabView extends ConsumerWidget {
           itemBuilder: (_, i) {
             final measurement = filtered[i];
             final card = type == MeasurementType.bloodPressure
-                ? BpRecordCard(measurement: measurement, age: age)
+                ? BpRecordCard(measurement: measurement, age: age, gender: gender)
                 : SugarRecordCard(measurement: measurement, age: age);
 
             return Dismissible(

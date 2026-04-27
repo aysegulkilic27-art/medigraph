@@ -65,6 +65,7 @@ class PdfPageBloodPressure {
   static pw.Page build(
     List<Measurement> bpList,
     int age,
+    String gender,
     ThresholdEngine engine,
   ) {
     return pw.Page(
@@ -86,6 +87,7 @@ class PdfPageBloodPressure {
                 systolic: m.value1.toInt(),
                 diastolic: (m.value2 ?? 0).toInt(),
                 age: age,
+                gender: gender,
               );
               return PdfTheme.stageColor(stage.label);
             },
@@ -114,7 +116,7 @@ class PdfPageBloodPressure {
           pw.SizedBox(height: 8),
           PdfWidgets.sectionTitle(AppTexts.pdfMeasurementDetails),
           pw.SizedBox(height: 4),
-          PdfTableBuilder.bloodPressure(bpList, age, engine),
+          PdfTableBuilder.bloodPressure(bpList, age, gender, engine),
           pw.Spacer(),
           PdfWidgets.footer(2, 3),
         ],

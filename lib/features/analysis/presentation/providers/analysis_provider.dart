@@ -80,6 +80,7 @@ CategoryStats _calculateStats(
   AnalysisCategory category,
   ThresholdEngine engine,
   int age,
+  String gender,
 ) {
   final filtered = _filterByCategory(allMeasurements, category);
   if (filtered.isEmpty) return CategoryStats.empty;
@@ -93,7 +94,7 @@ CategoryStats _calculateStats(
   return CategoryStats(
     total: filtered.length,
     exceeded: filtered
-        .where((m) => StageColorResolver.isExceeded(m, age))
+        .where((m) => StageColorResolver.isExceeded(m, age, gender: gender))
         .length,
     low: filtered.where((m) => _isLowForCategory(m, category, engine)).length,
     average: values.reduce((a, b) => a + b) / values.length,
@@ -138,8 +139,9 @@ Future<CategoryStats> categoryStats(
       await repo.getByDateRange(range.start, range.end, activeProfile?.id);
   final profile = await ref.watch(profileProvider.future);
   final age = profile?.age ?? 30;
+  final gender = profile?.gender ?? 'male';
   final engine = ThresholdEngine.instance;
-  return _calculateStats(allInRange, category, engine, age);
+  return _calculateStats(allInRange, category, engine, age, gender);
 }
 
 @riverpod
@@ -153,12 +155,13 @@ Future<List<BarChartGroupData>> categoryBarGroups(
   );
   final profile = await ref.watch(profileProvider.future);
   final age = profile?.age ?? 30;
+  final gender = profile?.gender ?? 'male';
 
   return list.asMap().entries.map((entry) {
     final i = entry.key;
     final m = entry.value;
     final value = category == AnalysisCategory.diastolic ? (m.value2 ?? 0) : m.value1;
-    final color = StageColorResolver.fromMeasurement(m, age);
+    final color = StageColorResolver.fromMeasurement(m, age, gender: gender);
 
     return BarChartGroupData(
       x: i,

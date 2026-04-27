@@ -20,6 +20,7 @@ class PdfTableBuilder {
   static pw.Widget bloodPressure(
     List<Measurement> list,
     int age,
+    String gender,
     ThresholdEngine engine,
   ) {
     final headers = ['Tarih', 'Büyük', 'Küçük', 'Durum', 'Not'];
@@ -28,6 +29,7 @@ class PdfTableBuilder {
         systolic: m.value1.toInt(),
         diastolic: (m.value2 ?? 0).toInt(),
         age: age,
+        gender: gender,
       );
       final note = (m.note ?? '').trim();
       return [
