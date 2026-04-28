@@ -57,7 +57,11 @@ class ProfileForm extends StatelessWidget {
           label: AppTexts.nameLabel,
           icon: Icons.badge_outlined,
         ),
-        SizedBox(height: AppDimensions.spacingSM(context) + AppDimensions.spacingXS(context)),
+        SizedBox(
+          height:
+              AppDimensions.spacingSM(context) +
+              AppDimensions.spacingXS(context),
+        ),
         _BirthDatePickerField(
           selectedDate: selectedBirthDate,
           label: AppTexts.birthDateLabel,
@@ -65,7 +69,11 @@ class ProfileForm extends StatelessWidget {
           validator: birthDateValidator,
           onDateChanged: onBirthDateChanged,
         ),
-        SizedBox(height: AppDimensions.spacingSM(context) + AppDimensions.spacingXS(context)),
+        SizedBox(
+          height:
+              AppDimensions.spacingSM(context) +
+              AppDimensions.spacingXS(context),
+        ),
         _ProfileField(
           controller: heightController,
           label: AppTexts.heightLabel,
@@ -73,7 +81,11 @@ class ProfileForm extends StatelessWidget {
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           validator: heightValidator,
         ),
-        SizedBox(height: AppDimensions.spacingSM(context) + AppDimensions.spacingXS(context)),
+        SizedBox(
+          height:
+              AppDimensions.spacingSM(context) +
+              AppDimensions.spacingXS(context),
+        ),
         _ProfileField(
           controller: weightController,
           label: AppTexts.weightLabel,
@@ -81,13 +93,21 @@ class ProfileForm extends StatelessWidget {
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           validator: weightValidator,
         ),
-        SizedBox(height: AppDimensions.spacingSM(context) + AppDimensions.spacingXS(context)),
+        SizedBox(
+          height:
+              AppDimensions.spacingSM(context) +
+              AppDimensions.spacingXS(context),
+        ),
         GenderDropdown(
           value: gender,
           onChanged: onGenderChanged,
           validator: genderValidator,
         ),
-        SizedBox(height: AppDimensions.spacingMD(context) + AppDimensions.spacingXS(context)),
+        SizedBox(
+          height:
+              AppDimensions.spacingMD(context) +
+              AppDimensions.spacingXS(context),
+        ),
         SizedBox(
           width: double.infinity,
           height: AppDimensions.inputHeight(context),
@@ -148,11 +168,15 @@ class _ProfileField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.inputFill,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.inputRadius(context)),
+          borderRadius: BorderRadius.circular(
+            AppDimensions.inputRadius(context),
+          ),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.inputRadius(context)),
+          borderRadius: BorderRadius.circular(
+            AppDimensions.inputRadius(context),
+          ),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         prefixIcon: Icon(icon, color: AppColors.primary),
@@ -179,10 +203,13 @@ class _BirthDatePickerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat(AppConstants.dateFormatFull);
-    final formattedDate = selectedDate != null ? dateFormat.format(selectedDate!) : '';
-    
+    final formattedDate = selectedDate != null
+        ? dateFormat.format(selectedDate!)
+        : '';
+
     return FormField<DateTime>(
-      validator: (value) => validator(value),
+      initialValue: selectedDate,
+      validator: (value) => validator(value ?? selectedDate),
       builder: (FormFieldState<DateTime> state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +218,8 @@ class _BirthDatePickerField extends StatelessWidget {
               onTap: () async {
                 final picked = await showDatePicker(
                   context: context,
-                  initialDate: selectedDate ?? DateTime(DateTime.now().year - 30),
+                  initialDate:
+                      selectedDate ?? DateTime(DateTime.now().year - 30),
                   firstDate: DateTime(1950),
                   lastDate: DateTime.now(),
                 );
@@ -207,7 +235,9 @@ class _BirthDatePickerField extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.inputFill,
-                  borderRadius: BorderRadius.circular(AppDimensions.inputRadius(context)),
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.inputRadius(context),
+                  ),
                   border: Border.all(
                     color: state.hasError ? Colors.red : Colors.transparent,
                     width: 2,
@@ -229,7 +259,9 @@ class _BirthDatePickerField extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            formattedDate.isNotEmpty ? formattedDate : 'Tarih seçin',
+                            formattedDate.isNotEmpty
+                                ? formattedDate
+                                : 'Tarih seçin',
                             style: GoogleFonts.nunito(
                               color: formattedDate.isNotEmpty
                                   ? AppColors.textPrimary
@@ -249,10 +281,7 @@ class _BirthDatePickerField extends StatelessWidget {
                 padding: EdgeInsets.only(top: AppDimensions.spacingXS(context)),
                 child: Text(
                   state.errorText ?? '',
-                  style: GoogleFonts.nunito(
-                    color: Colors.red,
-                    fontSize: 12,
-                  ),
+                  style: GoogleFonts.nunito(color: Colors.red, fontSize: 12),
                 ),
               ),
           ],
@@ -261,4 +290,3 @@ class _BirthDatePickerField extends StatelessWidget {
     );
   }
 }
-

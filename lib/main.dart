@@ -74,10 +74,11 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      // Burası en kritik nokta: activeProfile varsa HomeRoot, yoksa Seçim ekranı
+      // Active profile sadece oturum içi tutulur.
+      // Uygulama yeniden açıldığında state null başlar ve Profil Seç ekranı gelir.
       key: ValueKey(
         activeProfile?.id,
-      ), // Profil değiştiğinde tüm uygulamayı yenile
+      ), // Oturum içinde profil değiştiğinde tüm uygulamayı yenile
       home: activeProfile == null
           ? const ProfileListScreen()
           : const HomeRoot(),
