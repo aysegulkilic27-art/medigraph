@@ -29,6 +29,8 @@ class PdfPageSummary {
     required ThresholdEngine engine,
     required DateTime now,
     required DateTimeRange dateRange,
+    required int pageNumber,
+    required int totalPages,
   }) {
     final bpExceeded = bpList.where((m) {
       final stage = engine.evaluateBPStage(
@@ -148,7 +150,7 @@ class PdfPageSummary {
               ),
           ],
           pw.Spacer(),
-          PdfWidgets.footer(1, 3),
+          PdfWidgets.footer(pageNumber, totalPages),
         ],
       ),
     );

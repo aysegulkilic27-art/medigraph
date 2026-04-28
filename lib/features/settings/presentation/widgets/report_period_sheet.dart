@@ -219,6 +219,10 @@ class _ReportPeriodSheetState extends ConsumerState<ReportPeriodSheet> {
 
       final measurements = await ref.read(allMeasurementsProvider.future);
       final profile = ref.read(profileProvider).valueOrNull;
+      final isCustomLongerThanMonth =
+          option.days == null && range.duration.inDays > 30;
+      final shouldAggregate =
+          option.days == 30 || option.days == 90 || isCustomLongerThanMonth;
 
       if (!mounted) {
         return;
@@ -229,6 +233,7 @@ class _ReportPeriodSheetState extends ConsumerState<ReportPeriodSheet> {
         allMeasurements: measurements,
         profile: profile,
         dateRange: range,
+        aggregateWeekly: shouldAggregate,
       );
 
       if (mounted) {

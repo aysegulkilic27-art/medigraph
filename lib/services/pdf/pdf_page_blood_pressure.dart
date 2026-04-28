@@ -12,6 +12,7 @@ import 'pdf_chart_painter.dart';
 import 'pdf_font_loader.dart';
 import 'pdf_table_builder.dart';
 import 'pdf_theme.dart';
+import 'pdf_weekly_aggregate.dart';
 import 'pdf_widgets.dart';
 
 class PdfPageBloodPressure {
@@ -24,10 +25,7 @@ class PdfPageBloodPressure {
         pw.Container(
           width: 8,
           height: 8,
-          decoration: pw.BoxDecoration(
-            color: color,
-            shape: pw.BoxShape.circle,
-          ),
+          decoration: pw.BoxDecoration(color: color, shape: pw.BoxShape.circle),
         ),
         pw.SizedBox(width: 4),
         pw.Text(
@@ -45,11 +43,7 @@ class PdfPageBloodPressure {
     return pw.Row(
       mainAxisSize: pw.MainAxisSize.min,
       children: [
-        pw.Container(
-          width: 14,
-          height: 2,
-          color: color,
-        ),
+        pw.Container(width: 14, height: 2, color: color),
         pw.SizedBox(width: 4),
         pw.Text(
           label,
@@ -66,8 +60,16 @@ class PdfPageBloodPressure {
     List<Measurement> bpList,
     int age,
     String gender,
-    ThresholdEngine engine,
-  ) {
+    ThresholdEngine engine, {
+    required int pageNumber,
+    required int totalPages,
+    bool aggregateWeekly = false,
+    bool includeDetailsTable = true,
+  }) {
+    final weekly = aggregateWeekly
+        ? weeklyBloodPressureAggregates(bpList)
+        : const [];
+
     return pw.Page(
       pageFormat: PdfPageFormat.a4.landscape,
       margin: const pw.EdgeInsets.all(22),
@@ -76,31 +78,75 @@ class PdfPageBloodPressure {
         children: [
           PdfWidgets.header(AppTexts.pdfBPReport, null),
           pw.SizedBox(height: 10),
-          PdfWidgets.sectionTitle(AppTexts.pdfBPTrendCombined),
-          pw.SizedBox(height: 4),
-          PdfChartPainter.dualLineChart(
-            measurements: bpList,
-            getPrimaryValue: (m) => m.value1,
-            getSecondaryValue: (m) => m.value2 ?? 0,
-            getPointColor: (m) {
-              final stage = engine.evaluateBPStage(
-                systolic: m.value1.toInt(),
-                diastolic: (m.value2 ?? 0).toInt(),
-                age: age,
-                gender: gender,
-              );
-              return PdfTheme.stageColor(stage.label);
-            },
-            unit: 'mmHg',
-            height: 130,
-          ),
+          if (!aggregateWeekly) ...[
+            PdfWidgets.sectionTitle(AppTexts.pdfBPTrendCombined),
+            pw.SizedBox(height: 4),
+            PdfChartPainter.dualLineChart(
+              measurements: bpList,
+              getPrimaryValue: (m) => m.value1,
+              getSecondaryValue: (m) => m.value2 ?? 0,
+              getPointColor: (m) {
+                final stage = engine.evaluateBPStage(
+                  systolic: m.value1.toInt(),
+                  diastolic: (m.value2 ?? 0).toInt(),
+                  age: age,
+                  gender: gender,
+                );
+                return PdfTheme.stageColor(stage.label);
+              },
+              unit: 'mmHg',
+              height: 130,
+            ),
+          ] else ...[
+            PdfWidgets.sectionTitle('Haftalık Büyük Tansiyon (Min/Ort/Maks)'),
+            pw.SizedBox(height: 4),
+            PdfChartPainter.weeklyMinAvgMaxChart(
+              points: weekly
+                  .map(
+                    (w) => WeeklyTriple(
+                      weekStart: w.weekStart,
+                      min: w.systolicMin,
+                      avg: w.systolicAvg,
+                      max: w.systolicMax,
+                      count: w.count,
+                    ),
+                  )
+                  .toList(),
+              unit: 'mmHg',
+              height: 90,
+            ),
+            pw.SizedBox(height: 8),
+            PdfWidgets.sectionTitle('Haftalık Küçük Tansiyon (Min/Ort/Maks)'),
+            pw.SizedBox(height: 4),
+            PdfChartPainter.weeklyMinAvgMaxChart(
+              points: weekly
+                  .map(
+                    (w) => WeeklyTriple(
+                      weekStart: w.weekStart,
+                      min: w.diastolicMin,
+                      avg: w.diastolicAvg,
+                      max: w.diastolicMax,
+                      count: w.count,
+                    ),
+                  )
+                  .toList(),
+              unit: 'mmHg',
+              height: 90,
+            ),
+          ],
           pw.SizedBox(height: 8),
           pw.Wrap(
             spacing: 12,
             runSpacing: 4,
             children: [
-              _lineLegendItem(AppTexts.pdfSystolicLine, PdfTheme.primaryDark),
-              _lineLegendItem(AppTexts.pdfDiastolicLine, PdfTheme.accent),
+              if (!aggregateWeekly) ...[
+                _lineLegendItem(AppTexts.pdfSystolicLine, PdfTheme.primaryDark),
+                _lineLegendItem(AppTexts.pdfDiastolicLine, PdfTheme.accent),
+              ] else ...[
+                _lineLegendItem('Minimum', PdfTheme.primary),
+                _lineLegendItem('Ortalama', PdfTheme.primaryDark),
+                _lineLegendItem('Maksimum', PdfTheme.accent),
+              ],
             ],
           ),
           pw.SizedBox(height: 6),
@@ -110,15 +156,20 @@ class PdfPageBloodPressure {
             spacing: 10,
             runSpacing: 4,
             children: BloodPressureStage.values
-                .map((s) => _stageLegendItem(s.label, PdfTheme.stageColor(s.label)))
+                .map(
+                  (s) =>
+                      _stageLegendItem(s.label, PdfTheme.stageColor(s.label)),
+                )
                 .toList(),
           ),
-          pw.SizedBox(height: 8),
-          PdfWidgets.sectionTitle(AppTexts.pdfMeasurementDetails),
-          pw.SizedBox(height: 4),
-          PdfTableBuilder.bloodPressure(bpList, age, gender, engine),
+          if (includeDetailsTable) ...[
+            pw.SizedBox(height: 8),
+            PdfWidgets.sectionTitle(AppTexts.pdfMeasurementDetails),
+            pw.SizedBox(height: 4),
+            PdfTableBuilder.bloodPressure(bpList, age, gender, engine),
+          ],
           pw.Spacer(),
-          PdfWidgets.footer(2, 3),
+          PdfWidgets.footer(pageNumber, totalPages),
         ],
       ),
     );

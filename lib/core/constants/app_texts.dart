@@ -75,7 +75,7 @@ class AppTexts {
   static const measurementsSection = 'Ölçümler';
   static const settingsTitle = 'Ayarlar';
     static const bodyWarningBanner =
-      'Boy ve kilo bilgisi değişimleri ilerleyen ölçümlerinizdeki eşik değer hesabında kullanılır. Lütfen bilgilerinizi güncel tutun.';
+      'Boy ve kilo bilgileri metabolik değerlendirmede önemlidir. Lütfen bilgilerinizi güncel tutunuz.';
   static const updateProfile = 'Profili Güncelle';
   static const updateProfileSub = 'Mevcut profili düzenle';
   static const pdfReport = 'PDF Rapor Al';

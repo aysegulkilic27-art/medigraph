@@ -21,10 +21,15 @@ class PdfTableBuilder {
     List<Measurement> list,
     int age,
     String gender,
-    ThresholdEngine engine,
-  ) {
+    ThresholdEngine engine, {
+    int? maxRows = 30,
+    bool newestFirst = true,
+    bool showTruncationHint = true,
+  }) {
     final headers = ['Tarih', 'Büyük', 'Küçük', 'Durum', 'Not'];
-    final rows = list.reversed.take(30).map((m) {
+    final ordered = newestFirst ? list.reversed.toList() : [...list];
+    final visible = maxRows == null ? ordered : ordered.take(maxRows).toList();
+    final rows = visible.map((m) {
       final stage = engine.evaluateBPStage(
         systolic: m.value1.toInt(),
         diastolic: (m.value2 ?? 0).toInt(),
@@ -41,16 +46,27 @@ class PdfTableBuilder {
       ];
     }).toList();
 
-    return _table(headers, rows, list.length);
+    return _table(
+      headers,
+      rows,
+      list.length,
+      showTruncationHint: showTruncationHint,
+      maxRows: maxRows,
+    );
   }
 
   static pw.Widget bloodSugar(
     List<Measurement> list,
     int age,
-    ThresholdEngine engine,
-  ) {
+    ThresholdEngine engine, {
+    int? maxRows = 30,
+    bool newestFirst = true,
+    bool showTruncationHint = true,
+  }) {
     final headers = ['Tarih', 'Deger', 'Tur', 'Durum', 'Not'];
-    final rows = list.reversed.take(30).map((m) {
+    final ordered = newestFirst ? list.reversed.toList() : [...list];
+    final visible = maxRows == null ? ordered : ordered.take(maxRows).toList();
+    final rows = visible.map((m) {
       final stage = engine.evaluateSugarStage(
         value: m.value1,
         isFasting: m.isFasting ?? true,
@@ -65,18 +81,28 @@ class PdfTableBuilder {
       ];
     }).toList();
 
-    return _table(headers, rows, list.length);
+    return _table(
+      headers,
+      rows,
+      list.length,
+      showTruncationHint: showTruncationHint,
+      maxRows: maxRows,
+    );
   }
 
   static pw.Widget _table(
     List<String> headers,
     List<List<String>> rows,
-    int totalCount,
-  ) {
+    int totalCount, {
+    required bool showTruncationHint,
+    int? maxRows,
+  }) {
+    final isTruncated = maxRows != null && totalCount > maxRows;
+
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        if (totalCount > 30)
+        if (showTruncationHint && isTruncated)
           pw.Text(
             '${AppTexts.pdfShowingLast} $totalCount)',
             style: PdfFontLoader.textStyle(
