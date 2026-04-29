@@ -82,8 +82,8 @@ class SettingsScreen extends ConsumerWidget {
               SizedBox(height: AppDimensions.spacingMD(context)),
               SettingsListTile(
                 icon: Icons.switch_account_outlined,
-                title: 'Profil Değiştir',
-                subtitle: 'Başka bir profile geçiş yapın',
+                title: AppTexts.switchProfile,
+                subtitle: AppTexts.switchProfileSub,
                 iconColor: AppColors.primary,
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(

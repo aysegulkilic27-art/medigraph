@@ -261,7 +261,7 @@ class _BirthDatePickerField extends StatelessWidget {
                           Text(
                             formattedDate.isNotEmpty
                                 ? formattedDate
-                                : 'Tarih seçin',
+                                : AppTexts.selectDatePlaceholder,
                             style: GoogleFonts.nunito(
                               color: formattedDate.isNotEmpty
                                   ? AppColors.textPrimary

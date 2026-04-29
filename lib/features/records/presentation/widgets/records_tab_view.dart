@@ -39,9 +39,15 @@ class RecordsTabView extends ConsumerWidget {
                       ? Icons.favorite_outline
                       : Icons.water_drop_outlined,
                   color: AppColors.primary.withValues(alpha: 0.3),
-                  size: AppDimensions.iconLG(context) + AppDimensions.spacingXL(context) / 2,
+                  size:
+                      AppDimensions.iconLG(context) +
+                      AppDimensions.spacingXL(context) / 2,
                 ),
-                SizedBox(height: AppDimensions.spacingSM(context) + AppDimensions.spacingXS(context)),
+                SizedBox(
+                  height:
+                      AppDimensions.spacingSM(context) +
+                      AppDimensions.spacingXS(context),
+                ),
                 Text(
                   AppTexts.noMeasurements,
                   style: GoogleFonts.nunito(
@@ -61,7 +67,11 @@ class RecordsTabView extends ConsumerWidget {
           itemBuilder: (_, i) {
             final measurement = filtered[i];
             final card = type == MeasurementType.bloodPressure
-                ? BpRecordCard(measurement: measurement, age: age, gender: gender)
+                ? BpRecordCard(
+                    measurement: measurement,
+                    age: age,
+                    gender: gender,
+                  )
                 : SugarRecordCard(measurement: measurement, age: age);
 
             return Dismissible(
@@ -70,7 +80,9 @@ class RecordsTabView extends ConsumerWidget {
               background: Container(
                 decoration: BoxDecoration(
                   color: Colors.red.shade600,
-                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius(context)),
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.cardRadius(context),
+                  ),
                 ),
                 alignment: Alignment.centerRight,
                 padding: EdgeInsets.symmetric(
@@ -82,7 +94,7 @@ class RecordsTabView extends ConsumerWidget {
                     const Icon(Icons.delete_outline, color: Colors.white),
                     SizedBox(width: AppDimensions.spacingXS(context)),
                     Text(
-                      'Ölçümü Sil',
+                      AppTexts.deleteMeasurement,
                       style: GoogleFonts.nunito(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
@@ -99,7 +111,7 @@ class RecordsTabView extends ConsumerWidget {
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Ölçüm silindi')),
+                    const SnackBar(content: Text(AppTexts.measurementDeleted)),
                   );
                 }
               },

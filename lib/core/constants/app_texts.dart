@@ -17,6 +17,7 @@ class AppTexts {
       'Lütfen geçerli küçük tansiyon değeri girin.';
   static const invalidBPGeneral = invalidPressure;
   static const invalidProfile = 'Geçersiz profil bilgisi';
+  static const invalidDate = 'Lütfen geçerli bir tarih seçin.';
   static const invalidAge = 'Lütfen geçerli doğum tarihi seçin.';
   static const invalidHeight = 'Lütfen geçerli boy girin.';
   static const invalidWeight = 'Lütfen geçerli kilo girin.';
@@ -26,6 +27,8 @@ class AppTexts {
   static const sugarSaved = 'Şeker ölçümü kaydedildi.';
   static const bpSaved = 'Tansiyon ölçümü kaydedildi.';
   static const profileSaved = 'Profil kaydedildi.';
+  static const profileDeleted = 'Profil silindi';
+  static const measurementDeleted = 'Ölçüm silindi';
   static const dataDeleted = 'Tüm veriler silindi.';
 
   // Measurement
@@ -41,13 +44,13 @@ class AppTexts {
   static const saveButton = 'Kaydet';
   static const saving = 'Kaydediliyor...';
   static const noteHint = 'Not ekle (opsiyonel)';
-    static const systolicHint = 'Büyük Tansiyon (orn: 150 mmHg)';
-    static const diastolicHint = 'Küçük Tansiyon (orn: 70 mmHg)';
+  static const systolicHint = 'Büyük Tansiyon (orn: 150 mmHg)';
+  static const diastolicHint = 'Küçük Tansiyon (orn: 70 mmHg)';
   static const recentMeasurements = 'Son Ölçümler';
   static const noMeasurements = 'Henüz ölçüm yok.';
   static const firstMeasurementHint =
       'İlk ölçümü ekleyerek takibe başlayabilirsiniz.';
-    static const startTracking = firstMeasurementHint;
+  static const startTracking = firstMeasurementHint;
 
   // Analysis
   static const analysisTitle = 'Analiz';
@@ -74,7 +77,7 @@ class AppTexts {
   // Common
   static const measurementsSection = 'Ölçümler';
   static const settingsTitle = 'Ayarlar';
-    static const bodyWarningBanner =
+  static const bodyWarningBanner =
       'Boy ve kilo bilgileri metabolik değerlendirmede önemlidir. Lütfen bilgilerinizi güncel tutunuz.';
   static const updateProfile = 'Profili Güncelle';
   static const updateProfileSub = 'Mevcut profili düzenle';
@@ -96,6 +99,14 @@ class AppTexts {
   static const confirmYes = 'Evet, Sil';
   static const confirmNo = 'İptal';
   static const noProfile = 'Profil yok';
+  static const unnamedProfile = 'İsimsiz Profil';
+  static const profileAgeGender = 'Yaş: {age} | {gender}';
+  static const profileSelectionError = 'Profil seçim hatası';
+  static const profileEmptyState = 'Henüz bir profil oluşturulmamış.';
+  static const addNewProfile = 'Yeni Profil Ekle';
+  static const selectProfile = 'Profil Seçin';
+  static const switchProfile = 'Profil Değiştir';
+  static const switchProfileSub = 'Başka bir profile geçiş yapın';
 
   // Profile
   static const profileTitle = 'Profil';
@@ -108,6 +119,7 @@ class AppTexts {
   static const genderMale = 'Erkek';
   static const genderFemale = 'Kadın';
   static const genderRequired = 'Lütfen cinsiyet seçin.';
+  static const selectDatePlaceholder = 'Tarih seçin';
   static const genderMaleValue = 'male';
   static const genderFemaleValue = 'female';
 
@@ -132,6 +144,10 @@ class AppTexts {
   static const recordsTitle = 'Tüm Ölçümler';
   static const notesTabBP = 'Tansiyon';
   static const notesTabSugar = 'Şeker';
+  static const deleteMeasurement = 'Ölçümü Sil';
+
+  // Profile List
+  static const deleteProfile = 'Profili Sil';
 
   // Stages
   static const stageLow = 'Düşük';
@@ -175,10 +191,10 @@ class AppTexts {
   static const pdfFastingSugarAvg = 'Açlık Şekeri';
   static const pdfPostMealSugarAvg = 'Tokluk Şekeri';
   static const pdfBPReport = 'Tansiyon Raporu';
-    static const pdfBPTrendCombined = 'Tansiyon Trend Grafiği';
-    static const pdfLegendTitle = 'Renk Kodları';
-    static const pdfSystolicLine = 'Büyük';
-    static const pdfDiastolicLine = 'Küçük';
+  static const pdfBPTrendCombined = 'Tansiyon Trend Grafiği';
+  static const pdfLegendTitle = 'Renk Kodları';
+  static const pdfSystolicLine = 'Büyük';
+  static const pdfDiastolicLine = 'Küçük';
   static const pdfSystolicTrend = 'Büyük Tansiyon Trendi';
   static const pdfDiastolicTrend = 'Küçük Tansiyon Trendi';
   static const pdfMeasurementDetails = 'Ölçüm Detayları';

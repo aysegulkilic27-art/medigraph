@@ -1,4 +1,5 @@
 import 'package:diyabetansiyon/core/constants/app_dimensions.dart';
+import 'package:diyabetansiyon/core/constants/app_texts.dart';
 import 'package:diyabetansiyon/core/constants/app_theme.dart';
 import 'package:diyabetansiyon/features/profile/domain/entities/user_profile.dart';
 import 'package:diyabetansiyon/features/profile/presentation/providers/active_profile_provider.dart';
@@ -16,10 +17,25 @@ class ProfileListScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
         title: Text(
-          'Profil Seçin',
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          AppTexts.selectProfile,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            fontSize: AppDimensions.fontXL(context),
+            color: Colors.white,
+          ),
         ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.primaryDark, AppColors.primary],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        elevation: 0,
         centerTitle: true,
       ),
       body: ref
@@ -57,10 +73,15 @@ class ProfileListScreen extends ConsumerWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.delete_outline, color: Colors.white),
-                                SizedBox(width: AppDimensions.spacingXS(context)),
+                                const Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: AppDimensions.spacingXS(context),
+                                ),
                                 Text(
-                                  'Profili Sil',
+                                  AppTexts.deleteProfile,
                                   style: GoogleFonts.nunito(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -73,11 +94,15 @@ class ProfileListScreen extends ConsumerWidget {
                             final id = profile.id;
                             if (id == null) return;
 
-                            await ref.read(profileRepositoryProvider).deleteProfile(id);
+                            await ref
+                                .read(profileRepositoryProvider)
+                                .deleteProfile(id);
 
                             final active = ref.read(activeProfileProvider);
                             if (active?.id == id) {
-                              await ref.read(activeProfileProvider.notifier).clearActiveProfile();
+                              await ref
+                                  .read(activeProfileProvider.notifier)
+                                  .clearActiveProfile();
                             }
 
                             ref.invalidate(allProfilesProvider);
@@ -85,7 +110,9 @@ class ProfileListScreen extends ConsumerWidget {
 
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Profil silindi')),
+                                const SnackBar(
+                                  content: Text(AppTexts.profileDeleted),
+                                ),
                               );
                             }
                           },
@@ -99,7 +126,7 @@ class ProfileListScreen extends ConsumerWidget {
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('Hata: $e')),
+            error: (e, _) => Center(child: Text('${AppTexts.errorPrefix}: $e')),
           ),
     );
   }
@@ -116,7 +143,7 @@ class ProfileListScreen extends ConsumerWidget {
           ),
           SizedBox(height: AppDimensions.spacingMD(context)),
           Text(
-            'Henüz bir profil oluşturulmamış.',
+            AppTexts.profileEmptyState,
             style: GoogleFonts.nunito(
               fontSize: 16,
               color: AppColors.textSecondary,
@@ -140,7 +167,7 @@ class ProfileListScreen extends ConsumerWidget {
           );
         },
         icon: const Icon(Icons.add),
-        label: const Text('Yeni Profil Ekle'),
+        label: const Text(AppTexts.addNewProfile),
         style: ElevatedButton.styleFrom(
           minimumSize: Size(
             double.infinity,
@@ -186,11 +213,13 @@ class _ProfileCard extends ConsumerWidget {
           ),
         ),
         title: Text(
-          profile.name ?? 'İsimsiz Profil',
+          profile.name ?? AppTexts.unnamedProfile,
           style: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         subtitle: Text(
-          'Yaş: ${profile.age} | ${profile.gender}',
+          AppTexts.profileAgeGender
+              .replaceFirst('{age}', '${profile.age}')
+              .replaceFirst('{gender}', profile.gender),
           style: GoogleFonts.nunito(color: AppColors.textSecondary),
         ),
         trailing: const Icon(Icons.chevron_right),
@@ -201,7 +230,7 @@ class _ProfileCard extends ConsumerWidget {
                 .setActiveProfile(profile);
             // State değiştiğinde MyApp home'u güncelleyecektir.
           } catch (e) {
-            debugPrint('Profil seçim hatası: $e');
+            debugPrint('${AppTexts.profileSelectionError}: $e');
           }
         },
       ),

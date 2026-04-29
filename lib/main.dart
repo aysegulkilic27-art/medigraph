@@ -1,4 +1,5 @@
 import 'package:diyabetansiyon/core/constants/app_constants.dart';
+import 'package:diyabetansiyon/core/constants/app_texts.dart';
 import 'package:diyabetansiyon/core/constants/app_theme.dart';
 import 'package:diyabetansiyon/features/analysis/presentation/screens/analysis_screen.dart';
 import 'package:diyabetansiyon/features/measurement/data/models/measurement_hive_model.dart';
@@ -35,11 +36,15 @@ Future<void> _initHive() async {
     }
 
     try {
-      await Hive.openBox<MeasurementHiveModel>(AppConstants.measurementsBoxName);
+      await Hive.openBox<MeasurementHiveModel>(
+        AppConstants.measurementsBoxName,
+      );
     } catch (e) {
       debugPrint('Measurements box open error, deleting and recreating: $e');
       await Hive.deleteBoxFromDisk(AppConstants.measurementsBoxName);
-      await Hive.openBox<MeasurementHiveModel>(AppConstants.measurementsBoxName);
+      await Hive.openBox<MeasurementHiveModel>(
+        AppConstants.measurementsBoxName,
+      );
     }
 
     await Hive.openBox(AppConstants.settingsBoxName); // Ayarlar için ayrı kutu
@@ -65,7 +70,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'DiyabeTansiyon',
+      title: AppTexts.appName,
       theme: AppTheme.lightTheme,
       locale: const Locale('tr', 'TR'),
       supportedLocales: const [Locale('tr', 'TR'), Locale('en', 'US')],
